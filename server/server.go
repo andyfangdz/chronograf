@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	"log"
 	"math/rand"
 	"net"
@@ -12,6 +13,7 @@ import (
 	"path"
 	"runtime"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/influxdata/chronograf"
@@ -345,6 +347,14 @@ func (s *Server) Serve(ctx context.Context) error {
 	}
 
 	basepath = s.Basepath
+	if strings.HasSuffix(basepath, "/") {
+		err := fmt.Errorf("Basepath cannot end in trailing slash")
+		logger.
+			WithField("component", "server").
+			WithField("basepath", "invalid").
+			Error(err)
+		return err
+	}
 	if basepath != "" && s.PrefixRoutes == false {
 		logger.
 			WithField("component", "server").
