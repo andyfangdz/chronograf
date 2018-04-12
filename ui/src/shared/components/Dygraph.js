@@ -294,7 +294,7 @@ class Dygraph extends Component {
 
   render() {
     const {isHidden, staticLegendHeight} = this.state
-    const {staticLegend, children, hoverTime} = this.props
+    const {staticLegend, children} = this.props
     const nestedGraph = (children && children.length && children[0]) || children
     let dygraphStyle = {...this.props.containerStyle, zIndex: '2'}
     if (staticLegend) {
@@ -325,7 +325,6 @@ class Dygraph extends Component {
             <Crosshair
               dygraph={this.dygraph}
               staticLegendHeight={staticLegendHeight}
-              hoverTime={hoverTime}
             />
           </div>
         )}
@@ -415,7 +414,6 @@ Dygraph.propTypes = {
   timeRange: shape({
     lower: string.isRequired,
   }),
-  hoverTime: string,
   setResolution: func,
   dygraphRef: func,
   onZoom: func,
