@@ -214,7 +214,15 @@ class Dygraph extends Component {
   }
 
   handleHideLegend = () => {
-    this.setState({isHidden: true})
+    this.props.handleSetHoverTime(NULL_HOVER_TIME)
+    this.setState({isHidden: true, isHoveringThisGraph: false})
+  }
+
+  handleShowLegend = e => {
+    const newTime = this.eventToTimestamp(e)
+    this.props.handleSetHoverTime(newTime)
+
+    this.setState({isHidden: false, isHoveringThisGraph: true})
   }
 
   get lineColors() {
@@ -263,22 +271,6 @@ class Dygraph extends Component {
     return date.toISOString()
   }
 
-  handleMouseMove = e => {
-    const newTime = this.eventToTimestamp(e)
-    this.props.handleSetHoverTime(newTime)
-
-    this.setState({isHoveringThisGraph: true})
-  }
-
-  handleMouseLeave = () => {
-    this.props.handleSetHoverTime(NULL_HOVER_TIME)
-    this.setState({isHoveringThisGraph: false})
-  }
-
-  handleShowLegend = () => {
-    this.setState({isHidden: false})
-  }
-
   handleReceiveStaticLegendHeight = staticLegendHeight => {
     this.setState({staticLegendHeight})
   }
@@ -308,7 +300,7 @@ class Dygraph extends Component {
     }
 
     return (
-      <div className="dygraph-child" onMouseLeave={this.handleMouseLeave}>
+      <div className="dygraph-child">
         {this.areAnnotationsVisible && (
           <div className="dygraph-addons">
             <Annotations
@@ -335,8 +327,6 @@ class Dygraph extends Component {
           }}
           className="dygraph-child-container"
           style={dygraphStyle}
-          onMouseMove={_.throttle(this.handleMouseMove, 100)}
-          onMouseOut={this.handleMouseOut}
         />
         {staticLegend && (
           <StaticLegend
