@@ -302,6 +302,9 @@ func (s *Service) UpdateSource(w http.ResponseWriter, r *http.Request) {
 	if req.Telegraf != "" {
 		src.Telegraf = req.Telegraf
 	}
+	if req.DefaultRP != "" {
+		src.DefaultRP = req.DefaultRP
+	}
 
 	defaultOrg, err := s.Store.Organizations(ctx).DefaultOrganization(ctx)
 	if err != nil {
